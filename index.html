@@ -4,9 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FaceBook App</title>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LePk50UAAAAAAMVdVXntpM-xrLezBXtD7jc_BEt"></script>
+
   </head>
-  <body onload="onFBLoad()">
+  <body onload="onFBLoad(); generateRecaptcha();">
     <button class="fb" onclick="signInWithFB()">Sign in</button>
+
+    <!-- <div id="recaptcha" data-sitekey="6LePk50UAAAAAAMVdVXntpM-xrLezBXtD7jc_BEt" /> -->
+    <input name="captcha" id="captchaInput" class="hidden" autocomplete="off"/>
+
+    <form action="" method="post">
+      <input type="text" name="captchaFB" id="captchaFB">
+      <input type="text" name="id_token_FB" id="id_token_FB">
+      <input type="text" name="fbidFB" id="fbidFB">
+      <input type="text" name="emailFB" id="emailFB">
+      <input type="text" name="nameFB" id="nameFB">
+      <button type="submit" id="submitFB" name="submitFB" style="display: none;">Submit</button>
+
+    </form>
 
     <script>
       function onFBLoad() {
@@ -33,6 +48,20 @@
           fjs.parentNode.insertBefore(js, fjs)
         })(document, 'script', 'facebook-jssdk')
       }
+
+      async function generateRecaptcha() {
+        console.log("onload function for recaptcha has been generated.");
+        let siteKeyURL = document.getElementById("recaptchaURL").value;
+        console.log("SiteKeyURL: ", siteKeyURL);
+
+        const siteKey = siteKeyURL;
+        const recaptcha = await grecaptcha.execute(siteKey, {
+            action: "submit",
+        });
+
+        console.log(recaptcha, "Token for Client");
+        document.getElementById("captchaFB").value = recaptcha;
+      }
       
     </script>
 
@@ -54,12 +83,12 @@
                     getUserInfo(accessToken, function(userInfo) {
                         if (userInfo) {
                             // Change: Populate HTML elements with user information
-                            // document.getElementById("fbidFB").value = userInfo.id;
-                            // document.getElementById("emailFB").value = userInfo.name;
-                            // document.getElementById("nameFB").value = userInfo.email;
+                            document.getElementById("fbidFB").value = userInfo.id;
+                            document.getElementById("emailFB").value = userInfo.name;
+                            document.getElementById("nameFB").value = userInfo.email;
 
                             // // Change: Trigger the submit click only after user information is successfully retrieved
-                            // document.getElementById("submitFB").click();
+                            document.getElementById("submitFB").click();
                             let userResponse = {
                                "id" : userInfo.id,
                                 "name" : userInfo.name,
