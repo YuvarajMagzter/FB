@@ -11,7 +11,7 @@
     <button class="fb" onclick="signInWithFB()">Sign in</button>
 
     <!-- <div id="recaptcha" data-sitekey="6LePk50UAAAAAAMVdVXntpM-xrLezBXtD7jc_BEt" /> -->
-    <input name="captcha" id="captchaInput" class="hidden" autocomplete="off"/>
+    <!-- <input name="captcha" id="captchaInput" class="hidden" autocomplete="off"/> -->
 
     <form action="" method="post">
       <input type="text" name="captchaFB" id="captchaFB">
@@ -77,7 +77,7 @@
                     let accessToken = response.authResponse.accessToken;
                     console.log(accessToken, "accessToken");
 
-                    // document.getElementById("id_token_FB").value = accessToken;
+                    document.getElementById("id_token_FB").value = accessToken;
 
                     // Change: Call getUserInfo with a callback
                     getUserInfo(accessToken, function(userInfo) {
