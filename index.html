@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FaceBook App</title>
+<<<<<<< HEAD
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+=======
+    
+>>>>>>> 83e2323 (header changes)
+  </head>
+  <body onload="onFBLoad()">
+    <button class="fb" onclick="signInWithFB()">Sign in</button>
+
+    <script>
+      function onFBLoad() {
+        console.log('onlod function has been called for fb......')
+
+        window.fbAsyncInit = function () {
+          FB.init({
+            appId: 2267056250101760,
+            cookie: true,
+            xfbml: true,
+            version: 'v12.0'
+          })
+        }
+
+        ;(function (d, s, id) {
+          var js,
+            fjs = d.getElementsByTagName(s)[0]
+          if (d.getElementById(id)) {
+            return
+          }
+          js = d.createElement(s)
+          js.id = id
+          js.src = 'https://connect.facebook.net/en_US/sdk.js'
+          fjs.parentNode.insertBefore(js, fjs)
+        })(document, 'script', 'facebook-jssdk')
+      }
+      
+    </script>
+
+    <script>
+        function signInWithFB() {
+            console.log("Fb button has clicked....");
+
+            // Change: Pass a callback function to getUserInfo
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    // User is logged in and granted permission
+                    console.log(response, 'response from fb');
+                    let accessToken = response.authResponse.accessToken;
+                    console.log(accessToken, "accessToken");
+
+                    // document.getElementById("id_token_FB").value = accessToken;
+
+                    // Change: Call getUserInfo with a callback
+                    getUserInfo(accessToken, function(userInfo) {
+                        if (userInfo) {
+                            // Change: Populate HTML elements with user information
+                            // document.getElementById("fbidFB").value = userInfo.id;
+                            // document.getElementById("emailFB").value = userInfo.name;
+                            // document.getElementById("nameFB").value = userInfo.email;
+
+                            // // Change: Trigger the submit click only after user information is successfully retrieved
+                            // document.getElementById("submitFB").click();
+                            let userResponse = {
+                               "id" : userInfo.id,
+                                "name" : userInfo.name,
+                                "email" : userInfo.email
+                            }
+
+                            console.log(userResponse, "Responsee....");
+
+                        } else {
+                            console.error('Error fetching user information.');
+                        }
+                    });
+                } else {
+                    console.log('User cancelled login or did not fully authorize.');
+                }
+            }, { scope: 'email' });
+
+            console.log("FB page loaded.");
+        }
+
+        // Change: Accept a callback parameter to handle the retrieved user information
+        function getUserInfo(accessToken, callback) {
+            console.log("This is coming to getUserInfo block.");
+            // Make a request to the Facebook Graph API to get user information
+            FB.api('/me', { fields: 'id,name,email', access_token: accessToken }, function(response) {
+                if (response && !response.error) {
+                    // User information retrieved successfully
+                    // Change: Call the provided callback function with user details
+                    callback({
+                        id: response.id,
+                        name: response.name,
+                        email: response.email
+                    });
+                } else {
+                    // Error fetching user information
+                    console.error('Error fetching user information:', response.error);
+                    // Change: Call the callback function with an error parameter
+                    callback(null);
+                }
+            });
+        }
+    </script>
+  </body>
+</html>
